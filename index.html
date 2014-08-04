@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<head>
+<script src="angular.min.js"></script>
+<script src="crosscard.js"></script>
+<link rel="stylesheet" type="text/css" href="base.css">
+</head>
+<body ng-app="crossCardApp">
+	<div ng-controller="BoardController">
+		<div ng-show="gameOver">
+			<div>The winner is {{winner}}.</div>
+			<button ng-click="newGame()">Play again.</button>
+		</div>
+		
+			<h1>It is {{getCurrentPlayer().type}} turn.</h1>
+		
+	<table id="cardcross" >
+		<tr>
+			<td ng-repeat="row in gameBoard.board"  class="score">
+				{{gameBoard.getColValue($index)}}
+			</td>
+		</tr>
+		<tr ng-repeat="row in gameBoard.board">
+			<td ng-repeat="card in row track by $index"><div class="card" ng-class="{blankcard: !card}" ng-click="playCard($parent.$index, $index)">
+				<div>{{card.value || '&nbsp;'}}</div>
+				<div>{{card.type || '&nbsp;'}}</div>
+			</div></td>
+			<td class="score">
+				{{gameBoard.getRowValue($index)}}
+			</td>
+		</tr>
+	</table>
+</div>
+
+</body>
+</html>

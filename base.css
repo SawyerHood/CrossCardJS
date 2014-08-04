@@ -1,0 +1,33 @@
+.card {
+	height: 130px; 
+	width: 100px; 
+	background-color: FloralWhite ; 
+	border: 1px solid grey; 
+	border-radius: 25px; 
+	text-align: center;
+	font-family: sans-serif;
+	font-size: 30px;
+}
+.card > div {
+	margin-top: 15px
+}
+.blankcard {
+	background-color: transparent !important;
+	box-shadow: 0px 0px 5px blue;
+}
+#cardcross  td {
+	padding:10px;
+}
+#cardcross {
+	 margin-left:auto; 
+    margin-right:auto;
+}
+.score {
+	text-align: center;
+	font-family: sans-serif;
+	font-size: 20px;
+
+}
+body {
+	text-align: center;
+}
