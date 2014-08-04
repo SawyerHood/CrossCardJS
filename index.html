@@ -6,12 +6,18 @@
 </head>
 <body ng-app="crossCardApp">
 	<div ng-controller="BoardController">
+		<div ng-show="switchTurn" class = "nextturn">
+			<div>Moving to the next player</div>
+			<button ng-click="switchTurnOff()">OK</button>
+		</div>
+		<div ng-show="!switchTurn">
 		<div ng-show="gameOver">
 			<div>The winner is {{winner}}.</div>
 			<button ng-click="newGame()">Play again.</button>
 		</div>
-		
+		<div ng-show="!gameOver">
 			<h1>It is {{getCurrentPlayer().type}} turn.</h1>
+		</div>
 		
 	<table id="cardcross" >
 		<tr>
@@ -29,6 +35,26 @@
 			</td>
 		</tr>
 	</table>
+
+	<table id="playercards">
+		<tr>
+			<td>
+				<div class="card" ng-class="{blankcard: !getCurrentPlayer().currentCard}">
+					<div>{{getCurrentPlayer().currentCard.value || '&nbsp;'}}</div>
+					<div>{{getCurrentPlayer().currentCard.type || '&nbsp;'}}</div>
+				</div>
+				Current Card
+			</td>
+			<td>
+				<div class="card" ng-class="{blankcard: !getCurrentPlayer().reserveCard}" ng-click="reserve()">
+					<div>{{getCurrentPlayer().reserveCard.value || '&nbsp;'}}</div>
+					<div>{{getCurrentPlayer().reserveCard.type || '&nbsp;'}}</div>
+				</div>
+				Reserve Card
+			</td>
+		</tr>
+	</table>
+</div>
 </div>
 
 </body>

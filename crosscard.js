@@ -164,6 +164,7 @@ angular.module('crossCardApp', [])
         $scope.gameOver = true;
         $scope.winner = $scope.gameBoard.getWinner();
       } else {
+      $scope.switchTurn = true;
       $scope.nextTurn();
       }
     } else {
@@ -175,7 +176,12 @@ angular.module('crossCardApp', [])
     currentPlayerIndex++;
     if (currentPlayerIndex >= $scope.players.length)
       currentPlayerIndex = 0;
-    $scope.getCurrentPlayer().currentCard = $scope.deck.pop();
+    if ($scope.getCurrentPlayer().reserveCard == null) {
+      $scope.getCurrentPlayer().currentCard = $scope.deck.pop();
+    } else {
+      $scope.getCurrentPlayer().currentCard = $scope.getCurrentPlayer().reserveCard;
+      $scope.getCurrentPlayer().reserveCard = null;
+    }
   }
 
   $scope.newGame = function() {
@@ -185,10 +191,25 @@ angular.module('crossCardApp', [])
     $scope.gameBoard = new Board();
     $scope.nextTurn();
     $scope.gameOver = false;
+  }
+
+  $scope.reserve = function() {
+    var myPlayer = $scope.getCurrentPlayer();
+    if(myPlayer.reserveCard == null) {
+      myPlayer.reserveCard = myPlayer.currentCard;
+      myPlayer.currentCard = $scope.deck.pop();
+    } else {
+      alert("Can't reserve");
+    }
 
   }
 
+  $scope.switchTurnOff = function() {
+    $scope.switchTurn = false;
+  }
+
   $scope.gameOver = false;
+  $scope.switchTurn = false;
 
 }]);
 
