@@ -4,13 +4,15 @@
       this.type = type;
     }
 
-    exports.Player = function Player(type){
+    exports.Player = function Player(type, name, id){
       this.type = type;
+      this.name = name || "Sawyer";
+      this.id = id || 1;
       this.currentCard = null;
       this.reserveCard = null;
     }
 
-    exports.Board = function Board(deck, players, playerIndex, board) {
+    exports.Board = function Board(deck, players, gameId, playerIndex, board) {
       
 
       this.clearBoard = function() {
@@ -25,6 +27,7 @@
         return newBoard;
       }
 
+      this.gameId = gameId || 0;
       this.size = board ? board.length : 3;
       this.board = board || this.clearBoard();
       this.deck = deck;

@@ -1,5 +1,6 @@
+
 angular.module('crossCardApp', ['ngRoute'])
-.controller('BoardController', ['$scope', '$http', 'baseDeck', function($scope, $http, baseDeck){
+.controller('BoardController', ['$scope', '$http', 'baseDeck', 'game', function($scope, $http, baseDeck, game){
 
 
   baseDeck = baseDeck.data;
@@ -59,15 +60,31 @@ angular.module('crossCardApp', ['ngRoute'])
   $scope.switchTurn = false;
   var deck = shuffle(baseDeck.slice(0));
   var players = [new Player('-'), new Player('|')];
-  $scope.gameBoard = new Board(deck, players);
+  $scope.gameBoard = game.gameBoard;
   $scope.gameBoard.nextTurn();
-  
+}]).
+controller('MatchingController', ['$scope', '$location', 'socket', 'game', function($scope, $location, socket, game){
 
-  
+  $scope.matching = false;
+  $scope.connect = function() {
+    socket.emit('new player', $scope.name);
+    $scope.matching = true;
+  }
+
+  socket.on('match found', function (data) {
+    game.gameBoard = data.gameBoard;
+    game.yourPlayer = data.yourPlayer; 
+    $location.path('/OnlineMultiplayerGame').replace();
+    $scope.matching = false;
+  });
+
+ $scope.$watch('matching', function(newValue, oldValue) {
+    console.log(newValue);
+  });
 
 }]).
 config(function($routeProvider){
-  $routeProvider.when('/', {
+  $routeProvider.when('/OnlineMultiplayerGame', {
     templateUrl: 'static/partials/localMultiplayer.html',
     controller: 'BoardController',
     resolve: {
@@ -83,6 +100,37 @@ config(function($routeProvider){
         }
     }
 
+  })
+  .when('/',  {
+    templateUrl: "static/partials/matching.html",
+    controller: "MatchingController"
   });
+}).
+factory('socket', function ($rootScope) {
+  var socket = io.connect();
+  return {
+    on: function (eventName, callback) {
+      socket.on(eventName, function () {  
+        var args = arguments;
+        $rootScope.$apply(function () {
+          callback.apply(socket, args);
+        });
+      });
+    },
+    emit: function (eventName, data, callback) {
+      socket.emit(eventName, data, function () {
+        var args = arguments;
+        $rootScope.$apply(function () {
+          if (callback) {
+            callback.apply(socket, args);
+          }
+        });
+      })
+    }
+  };
+}).
+service('game', function(){
+  var board = {};
+  return board;
 });
 
