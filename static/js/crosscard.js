@@ -72,7 +72,7 @@ config(function($routeProvider){
     controller: 'BoardController',
     resolve: {
       baseDeck : function ($http) {
-          return $http ({method: 'GET', url: 'deck.json'}).
+          return $http ({method: 'GET', url: 'static/deck.json'}).
           success(function(data, status, headers, config) {
             console.log(data);
             return data;
