@@ -21,11 +21,32 @@ fs.readFile(file, 'utf8', function (err, data) {
   console.log(baseDeck);
 });
 
+function sendUpdatedGame(gameId) {
+  var game = games[gameId];
+  var p1 = game.players[0].id;
+  var p2 = game.players[1].id;
+  io.sockets.connected[p1].emit('game updated', {
+    board: game.board, 
+    player: game.players[0],
+    otherPlayer: {name: game.players[1].name, id: game.players[1].id}, 
+    currentTurnId: game.getCurrentPlayer().id, 
+    gameId: game.gameId
+   });
+  io.sockets.connected[p2].emit('game updated', {
+    board: game.board, 
+    player: game.players[1],
+    otherPlayer: {name: game.players[0].name, id: game.players[0].id}, 
+    currentTurnId: game.getCurrentPlayer().id, 
+    gameId: game.gameId
+   });
+}
+
 app.get('/', function(req, res){
   res.sendfile('./index.html');
 });
 
 app.use('/static', express.static(__dirname + '/static'));
+
 
 io.on('connection', function(socket){
   socket.on('new player', function(name) {
@@ -41,11 +62,12 @@ io.on('connection', function(socket){
       var gameId = d.getTime();
       games[gameId] = new gameModels.Board(baseDeck.splice(0), players, gameId);
       games[gameId].nextTurn();
-      io.sockets.connected[player1.id].emit('match found', {gameBoard: games[gameId], yourPlayer: player1});
-      io.sockets.connected[player2.id].emit('match found', {gameBoard: games[gameId], yourPlayer: player2});
+      console.log('Match bro');
+      sendUpdatedGame(gameId);
     }
   });
 });
+
 
 
 

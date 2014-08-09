@@ -2,8 +2,9 @@
 angular.module('crossCardApp', ['ngRoute'])
 .controller('BoardController', ['$scope', '$http', 'baseDeck', 'game', function($scope, $http, baseDeck, game){
 
-
+  $scope.game = game;
   baseDeck = baseDeck.data;
+  console.log(game.getPlayer());
   var Player = crossCardModels.Player;
   var Board = crossCardModels.Board;
   var Card = crossCardModels.Card;
@@ -20,7 +21,7 @@ angular.module('crossCardApp', ['ngRoute'])
   }
 
   $scope.getCurrentPlayer = function () {
-    return $scope.gameBoard.getCurrentPlayer(); 
+    return $scope.game.player; 
   };
 
   $scope.playCard = function (row, col) {
@@ -60,8 +61,7 @@ angular.module('crossCardApp', ['ngRoute'])
   $scope.switchTurn = false;
   var deck = shuffle(baseDeck.slice(0));
   var players = [new Player('-'), new Player('|')];
-  $scope.gameBoard = game.gameBoard;
-  $scope.gameBoard.nextTurn();
+  
 }]).
 controller('MatchingController', ['$scope', '$location', 'socket', 'game', function($scope, $location, socket, game){
 
@@ -71,16 +71,14 @@ controller('MatchingController', ['$scope', '$location', 'socket', 'game', funct
     $scope.matching = true;
   }
 
-  socket.on('match found', function (data) {
+  socket.on('game updated', function (data) {
     game.gameBoard = data.gameBoard;
     game.yourPlayer = data.yourPlayer; 
     $location.path('/OnlineMultiplayerGame').replace();
     $scope.matching = false;
   });
 
- $scope.$watch('matching', function(newValue, oldValue) {
-    console.log(newValue);
-  });
+ 
 
 }]).
 config(function($routeProvider){
@@ -91,7 +89,6 @@ config(function($routeProvider){
       baseDeck : function ($http) {
           return $http ({method: 'GET', url: 'static/deck.json'}).
           success(function(data, status, headers, config) {
-            console.log(data);
             return data;
           }).
           error(function(data, status, headers, config) {
@@ -129,8 +126,46 @@ factory('socket', function ($rootScope) {
     }
   };
 }).
-service('game', function(){
-  var board = {};
-  return board;
+factory('game', function(socket){
+  var gameData = {board: null, player: null, otherPlayer: null, currrentTurnId: 0, gameId: 0};
+  var board = new crossCardModels.Board(null, null, 0, 0, null);
+
+  function update(data) {
+    for(prop in data) {
+      gameData[prop] = data[prop];
+    }
+    board.board = gameData[board];
+    //console.log(data.player);
+  }
+
+  socket.on('game updated', function(data){
+    update(data);
+  });
+
+  
+  return {
+    getBoard : function() {
+      return gameData.board; 
+    },
+    playCard: function(row, col) {
+      socket.emit('play card', {row: row, col: col, gameId: gameData.gameId});
+    },
+    reserve: function() {
+      socket.emit('reserve card', {gameId: gameData.gameId});
+    },
+    isGameOver: null,
+    initGame: function(data) {
+      update(data);
+    },
+    getColValue: function(i) {
+      return board.getColValue(i);
+    },
+    getRowValue: function(i) {
+      return board.getRowValue(i);
+    },
+    getPlayer: function() {
+      return gameData.player;
+    }
+  };
 });
 

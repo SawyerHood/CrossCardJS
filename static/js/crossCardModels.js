@@ -31,7 +31,7 @@
       this.size = board ? board.length : 3;
       this.board = board || this.clearBoard();
       this.deck = deck;
-      this.players = players || [new Player('-'), new Player('|')];
+      this.players = players || [new exports.Player('-'), new exports.Player('|')];
       this.playerIndex = playerIndex || 0;
 
       this.isOccupied = function(row, col) {
