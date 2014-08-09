@@ -8,6 +8,7 @@ angular.module('crossCardApp', ['ngRoute'])
   var Board = crossCardModels.Board;
   var Card = crossCardModels.Card;
   var shuffle = crossCardModels.shuffle;
+
   
 
   function playRandomCards (){
@@ -20,7 +21,7 @@ angular.module('crossCardApp', ['ngRoute'])
   }
 
   $scope.getCurrentPlayer = function () {
-    return $scope.game.getPlayer(); 
+    return game.isMyTurn() ? 'Your (' + game.getPlayer().type + ')' : game.getOtherPlayer().name + ' (' + game.getOtherPlayer().type + ')'; 
   };
 
   $scope.playCard = function (row, col) {
@@ -95,6 +96,20 @@ config(function($routeProvider){
     templateUrl: "static/partials/matching.html",
     controller: "MatchingController"
   });
+
+
+}).
+run(function(socket, $location, game) {
+  socket.on('disconnect', function() {
+    console.log('Stopped');
+    game.stopMatching();
+    $location.path('/').replace();
+  });
+  socket.on('booted' , function() {
+    console.log('Stopped');
+    game.stopMatching();
+    $location.path('/').replace();
+  });
 }).
 factory('socket', function ($rootScope) {
   var socket = io.connect();
@@ -145,7 +160,6 @@ factory('game', function(socket){
   
   return {
     getBoard : function() {
-      console.log(gameData.board);
       return gameData.board; 
     },
     playCard: function(row, col) {
