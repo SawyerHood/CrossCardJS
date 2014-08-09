@@ -16,29 +16,15 @@ fs.readFile(file, 'utf8', function (err, data) {
     console.log('Error: ' + err);
     return;
   }
- 
   baseDeck = JSON.parse(data);
-  console.log(baseDeck);
 });
 
 function sendUpdatedGame(gameId) {
   var game = games[gameId];
   var p1 = game.players[0].id;
   var p2 = game.players[1].id;
-  io.sockets.connected[p1].emit('game updated', {
-    board: game.board, 
-    player: game.players[0],
-    otherPlayer: {name: game.players[1].name, id: game.players[1].id}, 
-    currentTurnId: game.getCurrentPlayer().id, 
-    gameId: game.gameId
-   });
-  io.sockets.connected[p2].emit('game updated', {
-    board: game.board, 
-    player: game.players[1],
-    otherPlayer: {name: game.players[0].name, id: game.players[0].id}, 
-    currentTurnId: game.getCurrentPlayer().id, 
-    gameId: game.gameId
-   });
+  io.sockets.connected[p1].emit('game updated', game.makeClientSlice(p1));
+  io.sockets.connected[p2].emit('game updated', game.makeClientSlice(p2));
 }
 
 app.get('/', function(req, res){
@@ -53,17 +39,27 @@ io.on('connection', function(socket){
     waitingPlayers.push(new gameModels.Player(null, name, socket.id));
     console.log(name);
     if(waitingPlayers.length >= 2){
-      var player1 = waitingPlayers.pop();
-      var player2 = waitingPlayers.pop();
+      var player1 = waitingPlayers.shift();
+      var player2 = waitingPlayers.shift();
       player1.type = '|';
       player2.type = '-';
       var players = [player1, player2];
       var d = new Date();
       var gameId = d.getTime();
-      games[gameId] = new gameModels.Board(baseDeck.splice(0), players, gameId);
+      games[gameId] = new gameModels.Game(new gameModels.Board(), players, gameModels.shuffle(baseDeck.splice(0)), gameId);
       games[gameId].nextTurn();
       console.log('Match bro');
       sendUpdatedGame(gameId);
+    }
+  });
+
+  socket.on('play card', function(data) {
+    var game = games[data.gameId];
+    game.playCard(data.row, data.col);
+    game.nextTurn();
+    sendUpdatedGame(data.gameId);
+    if(game.board.isBoardFull()){
+      delete games[data.gameId];
     }
   });
 });

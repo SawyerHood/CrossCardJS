@@ -1,12 +1,11 @@
 
-		<div ng-show="switchTurn" class = "nextturn">
-			<div>Moving to the next player</div>
-			<button ng-click="switchTurnOff()">OK</button>
+		
+		<div ng-show="!game.isMyTurn() && !game.isGameOver()">
+			Waiting for other player...
 		</div>
-		<div ng-show="!switchTurn">
-		<div ng-show="gameOver">
+		<div ng-show="game.isGameOver()">
 			<div>The winner is {{winner}}.</div>
-			<button ng-click="newGame()">Play again.</button>
+			<button ng-click="newGame()">Match again.</button>
 		</div>
 		<div ng-show="!gameOver">
 			<h1>It is {{getCurrentPlayer().type}} turn.</h1>
@@ -14,17 +13,17 @@
 		
 	<table id="cardcross" >
 		<tr>
-			<td ng-repeat="row in game.getBoard()"  class="score">
-				{{game.getColValue($index)}}
+			<td ng-repeat="row in game.getBoard().board"  class="score">
+				{{game.getBoard().getColValue($index)}}
 			</td>
 		</tr>
-		<tr ng-repeat="row in game.getBoard()">
+		<tr ng-repeat="row in game.getBoard().board">
 			<td ng-repeat="card in row track by $index"><div class="card" ng-class="{blankcard: !card}" ng-click="playCard($parent.$index, $index)">
 				<div>{{card.value || '&nbsp;'}}</div>
 				<div>{{card.type || '&nbsp;'}}</div>
 			</div></td>
 			<td class="score">
-				{{game.getRowValue($index)}}
+				{{game.getBoard().getRowValue($index)}}
 			</td>
 		</tr>
 	</table>
@@ -40,11 +39,11 @@
 			</td>
 			<td>
 				<div class="card" ng-class="{blankcard: !game.getPlayer().reserveCard}" ng-click="reserve()">
-					<div>{{game.getPlayer().value || '&nbsp;'}}</div>
-					<div>{{game.getPlayer().type || '&nbsp;'}}</div>
+					<div>{{game.getPlayer().reserveCard.value || '&nbsp;'}}</div>
+					<div>{{game.getPlayer().reserveCard.type || '&nbsp;'}}</div>
 				</div>
 				Reserve Card
 			</td>
 		</tr>
 	</table>
-</div>
+

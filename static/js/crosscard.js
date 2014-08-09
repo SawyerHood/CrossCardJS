@@ -1,10 +1,9 @@
 
 angular.module('crossCardApp', ['ngRoute'])
-.controller('BoardController', ['$scope', '$http', 'baseDeck', 'game', function($scope, $http, baseDeck, game){
+.controller('BoardController', ['$scope', '$http', 'baseDeck', 'game', '$location', function($scope, $http, baseDeck, game, $location){
 
   $scope.game = game;
   baseDeck = baseDeck.data;
-  console.log(game.getPlayer());
   var Player = crossCardModels.Player;
   var Board = crossCardModels.Board;
   var Card = crossCardModels.Card;
@@ -21,36 +20,32 @@ angular.module('crossCardApp', ['ngRoute'])
   }
 
   $scope.getCurrentPlayer = function () {
-    return $scope.game.player; 
+    return $scope.game.getPlayer(); 
   };
 
   $scope.playCard = function (row, col) {
-    if($scope.gameBoard.playCard(row, col)) {
-      if($scope.gameBoard.isBoardFull()) {
-        $scope.gameOver = true;
-        $scope.winner = $scope.gameBoard.getWinner();
-      } else {
-      $scope.switchTurn = true;
-      $scope.gameBoard.nextTurn();
-      }
-    } else {
-      alert("Choose another location.");
+    if($scope.game.isMyTurn() && !$scope.game.hasMadeMove()){ 
+      if(!$scope.game.playCard(row, col)) {
+      
+        alert("Choose another location.");
+      
+     }
     }
   }
 
   $scope.newGame = function() {
-    currentPlayerIndex = 0;
-    $scope.players = [new Player('-'), new Player('|')];
-    $scope.deck = shuffle(baseDeck.slice(0));
-    $scope.gameBoard = new Board(deck, players);
+    
+    game.startMatching(game.getPlayer().name);
     $scope.gameOver = false;
+    $location.path('/');
   }
 
   $scope.reserve = function() {
-    
-    if(!$scope.gameBoard.reserve()) {
-      alert("Can't reserve");
-    } 
+    if($scope.game.isMyTurn() && !$scope.game.hasMadeMove()){ 
+      if(!$scope.game.reserve()) {
+        alert("Can't reserve");
+      } 
+    }
   }
 
   $scope.switchTurnOff = function() {
@@ -59,23 +54,21 @@ angular.module('crossCardApp', ['ngRoute'])
 
   $scope.gameOver = false;
   $scope.switchTurn = false;
-  var deck = shuffle(baseDeck.slice(0));
-  var players = [new Player('-'), new Player('|')];
+  
   
 }]).
 controller('MatchingController', ['$scope', '$location', 'socket', 'game', function($scope, $location, socket, game){
 
-  $scope.matching = false;
+  $scope.game = game;
   $scope.connect = function() {
-    socket.emit('new player', $scope.name);
-    $scope.matching = true;
+    game.startMatching($scope.name);
   }
 
   socket.on('game updated', function (data) {
-    game.gameBoard = data.gameBoard;
-    game.yourPlayer = data.yourPlayer; 
-    $location.path('/OnlineMultiplayerGame').replace();
-    $scope.matching = false;
+    //game.initGame(data);
+    game.stopMatching();
+    $location.path('/OnlineMultiplayerGame');
+    
   });
 
  
@@ -127,15 +120,22 @@ factory('socket', function ($rootScope) {
   };
 }).
 factory('game', function(socket){
-  var gameData = {board: null, player: null, otherPlayer: null, currrentTurnId: 0, gameId: 0};
-  var board = new crossCardModels.Board(null, null, 0, 0, null);
-
+  var gameData = {board: new crossCardModels.Board(), player: null, otherPlayer: null, currentTurnId: 0, gameId: 0};
+  var madeMove = false;
+  var matching = false;
+  var gameOver = false;
   function update(data) {
     for(prop in data) {
-      gameData[prop] = data[prop];
+      if(prop != 'board')
+        gameData[prop] = data[prop];
     }
-    board.board = gameData[board];
-    //console.log(data.player);
+    madeMove = false;
+    gameData.board.board = data.board;
+    if(gameData.board.isBoardFull()) {
+      gameOver = true;
+    } else {
+      gameOver = false;
+    }
   }
 
   socket.on('game updated', function(data){
@@ -145,26 +145,55 @@ factory('game', function(socket){
   
   return {
     getBoard : function() {
+      console.log(gameData.board);
       return gameData.board; 
     },
     playCard: function(row, col) {
+      var cardPlaced = gameData.board.placeCard(gameData['player'].currentCard, row, col);
+      if(!cardPlaced)
+        return false;
+      madeMove = true;
       socket.emit('play card', {row: row, col: col, gameId: gameData.gameId});
+      return true;
     },
     reserve: function() {
-      socket.emit('reserve card', {gameId: gameData.gameId});
+      if(gameData['player'].reserveCard)
+        return false;
+      madeMove = true;
+      socket.emit('reserve card', gameData.gameId);
+      return true;
     },
     isGameOver: null,
     initGame: function(data) {
       update(data);
     },
-    getColValue: function(i) {
-      return board.getColValue(i);
-    },
-    getRowValue: function(i) {
-      return board.getRowValue(i);
-    },
     getPlayer: function() {
       return gameData.player;
+    },
+    getOtherPlayer: function() {
+      return gameData.otherPlayer;
+    },
+    isMyTurn: function () {
+      return gameData.player.id == gameData.currentTurnId;
+    },
+    hasMadeMove: function() {
+      return madeMove;
+    },
+    isMatching: function () {
+      return matching;
+    },
+    startMatching: function(name) {
+      socket.emit('new player', name);
+      matching = true;
+    },
+    stopMatching: function() {
+      matching = false;
+    },
+    isGameOver: function() {
+      return gameOver;
+    },
+    getWinner: function() {
+      return gameData.player.type == gameData.board.getWinner() ? gameData.player.name : gameData.otherPlayer.name;
     }
   };
 });

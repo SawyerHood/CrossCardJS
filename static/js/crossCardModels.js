@@ -12,9 +12,69 @@
       this.reserveCard = null;
     }
 
-    exports.Board = function Board(deck, players, gameId, playerIndex, board) {
-      
+    exports.Game = function Game(board, players, deck, gameId) {
 
+      this.gameId = gameId || 0;
+      this.board = board;
+      this.players = players
+      this.deck = deck;
+      this.playerIndex = 0;
+
+      this.getCurrentPlayer = function () {
+        return this.players[this.playerIndex]; 
+      }
+
+      this.nextTurn = function() {
+        this.playerIndex++;
+        if (this.playerIndex >= this.players.length)
+          this.playerIndex = 0;
+        if (this.getCurrentPlayer().reserveCard == null) {
+          this.getCurrentPlayer().currentCard = this.deck.pop();
+        } else {
+          this.getCurrentPlayer().currentCard = this.getCurrentPlayer().reserveCard;
+          this.getCurrentPlayer().reserveCard = null;
+        }
+      }
+
+    
+
+      this.playCard = function (row, col) {
+        var didPlace = board.placeCard(this.getCurrentPlayer().currentCard, row, col);
+        if(didPlace)
+          this.getCurrentPlayer().currentCard = null;
+        return didPlace;
+      }
+
+      this.reserve = function() {
+        var myPlayer = this.getCurrentPlayer();
+        if(myPlayer.reserveCard == null) {
+          myPlayer.reserveCard = myPlayer.currentCard;
+          myPlayer.currentCard = this.deck.pop();
+          return true;
+        } 
+        return false;
+
+      }
+
+      this._makeHiddenPlayerSlice = function (player) {
+        return {id: player.id, name: player.name, type: player.type}
+      }
+
+      this.makeClientSlice = function(playerId) {
+        var slice = {
+          board: this.board.board,
+          player: this.players[0].id == playerId ? this.players[0]:this.players[1],
+          otherPlayer: this._makeHiddenPlayerSlice(this.players[0].id != playerId ? this.players[0]:this.players[1]),
+          currentTurnId: this.getCurrentPlayer().id, 
+          gameId: this.gameId
+        };
+        return slice;
+      }
+
+    }
+
+    exports.Board = function Board(board) {
+      
       this.clearBoard = function() {
         newBoard = [];
         for(var i = 0; i < this.size; i++) {
@@ -27,12 +87,9 @@
         return newBoard;
       }
 
-      this.gameId = gameId || 0;
-      this.size = board ? board.length : 3;
+      this.size = 3;
       this.board = board || this.clearBoard();
-      this.deck = deck;
-      this.players = players || [new exports.Player('-'), new exports.Player('|')];
-      this.playerIndex = playerIndex || 0;
+
 
       this.isOccupied = function(row, col) {
         if(this.board.length <= row || this.board[row].length <= col)
@@ -122,39 +179,7 @@
         return null;
       }
 
-      this.nextTurn = function() {
-      this.playerIndex++;
-      if (this.playerIndex >= this.players.length)
-        this.playerIndex = 0;
-      if (this.getCurrentPlayer().reserveCard == null) {
-        this.getCurrentPlayer().currentCard = this.deck.pop();
-      } else {
-        this.getCurrentPlayer().currentCard = this.getCurrentPlayer().reserveCard;
-        this.getCurrentPlayer().reserveCard = null;
-      }
-    }
-
-    this.getCurrentPlayer = function () {
-      return this.players[this.playerIndex]; 
-    };
-
-    this.playCard = function (row, col) {
-        var didPlace = this.placeCard(this.getCurrentPlayer().currentCard, row, col);
-        if(didPlace)
-          this.getCurrentPlayer().currentCard = null;
-        return didPlace;
-    }
-
-    this.reserve = function() {
-      var myPlayer = this.getCurrentPlayer();
-      if(myPlayer.reserveCard == null) {
-        myPlayer.reserveCard = myPlayer.currentCard;
-        myPlayer.currentCard = this.deck.pop();
-        return true;
-      } 
-      return false;
-
-    }
+      
   }
 
   exports.shuffle = function shuffle(o){ 
