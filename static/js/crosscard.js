@@ -96,7 +96,7 @@ angular.module('crossCardApp', ['ngRoute'])
 
 
 })
-.run(function(socket, $location, game) {
+.run(function(socket, $location, game, $rootScope) {
   socket.on('disconnect', function() { //If they are disconnected, go back to the main screen.
     console.log('Stopped');
     game.stopMatching();
@@ -107,6 +107,13 @@ angular.module('crossCardApp', ['ngRoute'])
     game.stopMatching();
     $location.path('/').replace();
   });
+  $rootScope.$on('$routeChangeStart', function(event, next, current) {
+    if(!game.isInGame()) {
+      if(next.templateUrl === 'static/partials/localMultiplayer.html'){
+        $location.path('/');
+      }
+    }
+  })
 })
 .factory('socket', function($rootScope) { //Socket io factory.
   var socket = io.connect();
@@ -132,16 +139,28 @@ angular.module('crossCardApp', ['ngRoute'])
   };
 })
 .factory('game', function(socket) { //Stores all game data.
-  var gameData = {
-    board: new crossCardModels.Board(),
-    player: null,
-    otherPlayer: null,
-    currentTurnId: 0,
-    gameId: 0
-  };
-  var madeMove = false;
-  var matching = false;
-  var gameOver = false;
+
+  var gameData;
+  var madeMove;
+  var matching;
+  var gameOver;
+  var inGame;
+
+  function resetGame() {
+      gameData = {
+      board: new crossCardModels.Board(),
+      player: null,
+      otherPlayer: null,
+      currentTurnId: 0,
+      gameId: 0
+    };
+
+    madeMove = false;
+    matching = false;
+    gameOver = false;
+    inGame = false;
+  }
+  
 
   function update(data) {
     for (prop in data) {
@@ -161,6 +180,7 @@ angular.module('crossCardApp', ['ngRoute'])
     update(data);
   });
 
+  resetGame();
 
   return {
     getBoard: function() {
@@ -205,8 +225,10 @@ angular.module('crossCardApp', ['ngRoute'])
       return matching;
     },
     startMatching: function(name) {
+      resetGame();
       socket.emit('new player', name);
       matching = true;
+      inGame = true;
     },
     stopMatching: function() {
       matching = false;
@@ -216,6 +238,9 @@ angular.module('crossCardApp', ['ngRoute'])
     },
     getWinner: function() {
       return gameData.player.type == gameData.board.getWinner() ? gameData.player.name : gameData.otherPlayer.name;
+    },
+    isInGame: function() {
+      return inGame;
     }
   };
 });
