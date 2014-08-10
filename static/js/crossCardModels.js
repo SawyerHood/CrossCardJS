@@ -71,6 +71,10 @@
         return slice;
       }
 
+      this.replaceFaceDownCards = function() {
+        this.board.replaceFaceDownCards(this.deck);
+      }
+
     }
 
     exports.Board = function Board(board) {
@@ -84,6 +88,7 @@
           }
           
         }
+        newBoard[newBoard.length%2][newBoard.length%2] = new exports.Card(0, 'CC');
         return newBoard;
       }
 
@@ -177,6 +182,18 @@
           }
         }
         return null;
+      }
+
+      this.replaceFaceDownCards = function(deck) {
+        for(var i = 0; i < this.size; i++) {
+          for(var j = 0; j < this.size; j++) {
+            var card = this.getCard(i, j);;
+            if(card) {
+              if(card.type == 'CC')
+                this.board[i][j] = deck.pop();
+            }
+          }
+        }
       }
 
       

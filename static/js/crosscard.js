@@ -21,7 +21,7 @@ angular.module('crossCardApp', ['ngRoute'])
   }
 
   $scope.getCurrentPlayer = function () {
-    return game.isMyTurn() ? 'Your (' + game.getPlayer().type + ')' : game.getOtherPlayer().name + ' (' + game.getOtherPlayer().type + ')'; 
+    return game.isMyTurn() ?  game.getPlayer().name + '\'s (' + game.getPlayer().type + ')' : game.getOtherPlayer().name + '\'s (' + game.getOtherPlayer().type + ')'; 
   };
 
   $scope.playCard = function (row, col) {

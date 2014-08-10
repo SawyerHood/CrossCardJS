@@ -4,11 +4,11 @@
 			Waiting for other player...
 		</div>
 		<div ng-show="game.isGameOver()">
-			<div>The winner is {{winner}}.</div>
+			<div>The winner is {{game.getWinner()}}.</div>
 			<button ng-click="newGame()">Match again.</button>
 		</div>
 		<div ng-show="!gameOver">
-			<h1>It is {{getCurrentPlayer()}}'s turn.</h1>
+			<h1>It is {{getCurrentPlayer()}} turn.</h1>
 		</div>
 		
 	<table id="cardcross" >

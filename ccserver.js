@@ -48,7 +48,7 @@ io.on('connection', function(socket){
       var gameId = d.getTime();
       games[gameId] = new gameModels.Game(new gameModels.Board(), players, gameModels.shuffle(baseDeck.slice(0)), gameId);
       games[gameId].nextTurn();
-      console.log('Match bro');
+      console.log(player1.name + ' ' + player2.name + ' matched.');
       sendUpdatedGame(gameId);
     }
   });
@@ -57,6 +57,9 @@ io.on('connection', function(socket){
     var game = games[data.gameId];
     game.playCard(data.row, data.col);
     game.nextTurn();
+    if(game.board.isBoardFull()){
+      game.replaceFaceDownCards();
+    }
     sendUpdatedGame(data.gameId);
     if(game.board.isBoardFull()){
       delete games[data.gameId];
@@ -83,10 +86,9 @@ io.on('connection', function(socket){
           var indexToDC = (j + games[gameId].players.length - 1) % games[gameId].players.length;
           var toDC = games[gameId].players[indexToDC].id;
           for(key in io.sockets.connected) {
-            console.log(io.sockets.connected);
           }
           if(toDC in io.sockets.connected) {
-            console.log('THIHFOSDFKSHDFUE');
+          
             io.sockets.connected[toDC].emit('booted');
             delete games[gameId];
           }
