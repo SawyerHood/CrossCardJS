@@ -1,17 +1,17 @@
 
-var express    = require('express');    // call express
-var app        = express();         // define our app using express
+var express = require('express'); // call express
+var app = express(); // define our app using express
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var gameModels = require('./static/js/crossCardModels.js');
-var port = process.env.PORT || 8080;    // set our port
+var port = process.env.PORT || 8080; // set our port
 var fs = require('fs');
 var file = __dirname + '/static/deck.json';
 var waitingPlayers = [];
 var baseDeck;
 var games = {};
 
-fs.readFile(file, 'utf8', function (err, data) {
+fs.readFile(file, 'utf8', function(err, data) {
   if (err) {
     console.log('Error: ' + err);
     return;
@@ -27,18 +27,18 @@ function sendUpdatedGame(gameId) {
   io.sockets.connected[p2].emit('game updated', game.makeClientSlice(p2));
 }
 
-app.get('/', function(req, res){
+app.get('/', function(req, res) {
   res.sendfile('./index.html');
 });
 
 app.use('/static', express.static(__dirname + '/static'));
 
 
-io.on('connection', function(socket){
+io.on('connection', function(socket) {
   socket.on('new player', function(name) {
     waitingPlayers.push(new gameModels.Player(null, name, socket.id));
     console.log(name);
-    if(waitingPlayers.length >= 2){
+    if (waitingPlayers.length >= 2) {
       var player1 = waitingPlayers.shift();
       var player2 = waitingPlayers.shift();
       player1.type = '|';
@@ -57,11 +57,11 @@ io.on('connection', function(socket){
     var game = games[data.gameId];
     game.playCard(data.row, data.col);
     game.nextTurn();
-    if(game.board.isBoardFull()){
+    if (game.board.isBoardFull()) {
       game.replaceFaceDownCards();
     }
     sendUpdatedGame(data.gameId);
-    if(game.board.isBoardFull()){
+    if (game.board.isBoardFull()) {
       delete games[data.gameId];
     }
   });
@@ -75,20 +75,19 @@ io.on('connection', function(socket){
   socket.on('disconnect', function() {
     console.log(socket.id + ' Disconnected');
     for (var i = 0; i < waitingPlayers.length; i++) {
-      if(waitingPlayers[i].id == socket.id) {
-        waitingPlayers.splice(i,1);
+      if (waitingPlayers[i].id == socket.id) {
+        waitingPlayers.splice(i, 1);
         break;
       }
     }
     for (gameId in games) {
-      for(var j = 0; j < games[gameId].players.length; j++){
-        if(games[gameId].players[j].id == socket.id) {
+      for (var j = 0; j < games[gameId].players.length; j++) {
+        if (games[gameId].players[j].id == socket.id) {
           var indexToDC = (j + games[gameId].players.length - 1) % games[gameId].players.length;
           var toDC = games[gameId].players[indexToDC].id;
-          for(key in io.sockets.connected) {
-          }
-          if(toDC in io.sockets.connected) {
-          
+          for (key in io.sockets.connected) {}
+          if (toDC in io.sockets.connected) {
+
             io.sockets.connected[toDC].emit('booted');
             delete games[gameId];
           }

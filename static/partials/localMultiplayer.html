@@ -1,49 +1,49 @@
 
-		
-		<div ng-show="!game.isMyTurn() && !game.isGameOver()">
-			Waiting for other player...
-		</div>
-		<div ng-show="game.isGameOver()">
-			<div>The winner is {{game.getWinner()}}.</div>
-			<button ng-click="newGame()">Match again.</button>
-		</div>
-		<div ng-show="!gameOver">
-			<h1>It is {{getCurrentPlayer()}} turn.</h1>
-		</div>
-		
-	<table id="cardcross" >
-		<tr>
-			<td ng-repeat="row in game.getBoard().board"  class="score">
-				{{game.getBoard().getColValue($index)}}
-			</td>
-		</tr>
-		<tr ng-repeat="row in game.getBoard().board">
-			<td ng-repeat="card in row track by $index"><div class="card" ng-class="{blankcard: !card}" ng-click="playCard($parent.$index, $index)">
-				<div>{{card.value || '&nbsp;'}}</div>
-				<div>{{card.type || '&nbsp;'}}</div>
-			</div></td>
-			<td class="score">
-				{{game.getBoard().getRowValue($index)}}
-			</td>
-		</tr>
-	</table>
+<div ng-show="!game.isMyTurn() && !game.isGameOver()">
+  Waiting for other player...
+</div>
+<div ng-show="game.isGameOver()">
+  <div>The winner is {{game.getWinner()}}.</div>
+  <button ng-click="newGame()">Match again.</button>
+</div>
+<div ng-show="!gameOver">
+  <h1>It is {{getCurrentPlayer()}} turn.</h1>
+</div>
 
-	<table id="playercards">
-		<tr>
-			<td>
-				<div class="card" ng-class="{blankcard: !game.getPlayer().currentCard}">
-					<div>{{game.getPlayer().currentCard.value || '&nbsp;'}}</div>
-					<div>{{game.getPlayer().currentCard.type || '&nbsp;'}}</div>
-				</div>
-				Current Card
-			</td>
-			<td>
-				<div class="card" ng-class="{blankcard: !game.getPlayer().reserveCard}" ng-click="reserve()">
-					<div>{{game.getPlayer().reserveCard.value || '&nbsp;'}}</div>
-					<div>{{game.getPlayer().reserveCard.type || '&nbsp;'}}</div>
-				</div>
-				Reserve Card
-			</td>
-		</tr>
-	</table>
+<table id="cardcross">
+  <tr>
+    <td ng-repeat="row in game.getBoard().board" class="score">
+      {{game.getBoard().getColValue($index)}}
+    </td>
+  </tr>
+  <tr ng-repeat="row in game.getBoard().board">
+    <td ng-repeat="card in row track by $index">
+      <div class="card" ng-class="{blankcard: !card}" ng-click="playCard($parent.$index, $index)">
+        <div>{{card.value || '&nbsp;'}}</div>
+        <div>{{card.type || '&nbsp;'}}</div>
+      </div>
+    </td>
+    <td class="score">
+      {{game.getBoard().getRowValue($index)}}
+    </td>
+  </tr>
+</table>
 
+<table id="playercards">
+  <tr>
+    <td>
+      <div class="card" ng-class="{blankcard: !game.getPlayer().currentCard}">
+        <div>{{game.getPlayer().currentCard.value || '&nbsp;'}}</div>
+        <div>{{game.getPlayer().currentCard.type || '&nbsp;'}}</div>
+      </div>
+      Current Card
+    </td>
+    <td>
+      <div class="card" ng-class="{blankcard: !game.getPlayer().reserveCard}" ng-click="reserve()">
+        <div>{{game.getPlayer().reserveCard.value || '&nbsp;'}}</div>
+        <div>{{game.getPlayer().reserveCard.type || '&nbsp;'}}</div>
+      </div>
+      Reserve Card
+    </td>
+  </tr>
+</table>
