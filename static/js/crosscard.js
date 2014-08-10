@@ -1,31 +1,22 @@
-
+/**
+ * The client javascript file.
+ * @author Sawyer Hood
+ */
 angular.module('crossCardApp', ['ngRoute'])
-  .controller('BoardController', ['$scope', '$http', 'baseDeck', 'game', '$location',
+  .controller('BoardController', ['$scope', '$http', 'baseDeck', 'game', '$location', //Controls the board.
     function($scope, $http, baseDeck, game, $location) {
 
       $scope.game = game;
       baseDeck = baseDeck.data;
-      var Player = crossCardModels.Player;
-      var Board = crossCardModels.Board;
-      var Card = crossCardModels.Card;
-      var shuffle = crossCardModels.shuffle;
-
-
-
-      function playRandomCards() {
-        var types = ["+", "-", "|", ]
-        for (var i = 0; i < $scope.gameBoard.size; i++) {
-          for (var j = 0; j < $scope.gameBoard.size; j++) {
-            $scope.gameBoard.placeCard($scope.deck.pop(), i, j);
-          }
-        }
-      }
-
-      $scope.getCurrentPlayer = function() {
-        return game.isMyTurn() ? game.getPlayer().name + '\'s (' + game.getPlayer().type + ')' : game.getOtherPlayer().name + '\'s (' + game.getOtherPlayer().type + ')';
+     
+      $scope.getCurrentPlayer = function() { //Returns the name of the current player.
+        if(game.isMyTurn()) {
+          return game.getPlayer().name + '\'s (' + game.getPlayer().type + ')';
+        } 
+        return game.getOtherPlayer().name + '\'s (' + game.getOtherPlayer().type + ')';
       };
 
-      $scope.playCard = function(row, col) {
+      $scope.playCard = function(row, col) { //Plays a the given location.
         if ($scope.game.isMyTurn() && !$scope.game.hasMadeMove()) {
           if (!$scope.game.playCard(row, col)) {
 
@@ -35,14 +26,14 @@ angular.module('crossCardApp', ['ngRoute'])
         }
       }
 
-      $scope.newGame = function() {
+      $scope.newGame = function() { //Puts the player back into match making.
 
         game.startMatching(game.getPlayer().name);
         $scope.gameOver = false;
         $location.path('/');
       }
 
-      $scope.reserve = function() {
+      $scope.reserve = function() { //Reserves a card.
         if ($scope.game.isMyTurn() && !$scope.game.hasMadeMove()) {
           if (!$scope.game.reserve()) {
             alert("Can't reserve");
@@ -60,7 +51,7 @@ angular.module('crossCardApp', ['ngRoute'])
 
     }
   ])
-.controller('MatchingController', ['$scope', '$location', 'socket', 'game',
+.controller('MatchingController', ['$scope', '$location', 'socket', 'game', //Controller for the match making process.
   function($scope, $location, socket, game) {
 
     $scope.game = game;
@@ -69,7 +60,6 @@ angular.module('crossCardApp', ['ngRoute'])
     }
 
     socket.on('game updated', function(data) {
-      //game.initGame(data);
       game.stopMatching();
       $location.path('/OnlineMultiplayerGame');
 
@@ -107,18 +97,18 @@ angular.module('crossCardApp', ['ngRoute'])
 
 })
 .run(function(socket, $location, game) {
-  socket.on('disconnect', function() {
+  socket.on('disconnect', function() { //If they are disconnected, go back to the main screen.
     console.log('Stopped');
     game.stopMatching();
     $location.path('/').replace();
   });
-  socket.on('booted', function() {
+  socket.on('booted', function() { //If they are booted go back to the main screen.
     console.log('Stopped');
     game.stopMatching();
     $location.path('/').replace();
   });
 })
-.factory('socket', function($rootScope) {
+.factory('socket', function($rootScope) { //Socket io factory.
   var socket = io.connect();
   return {
     on: function(eventName, callback) {
@@ -141,7 +131,7 @@ angular.module('crossCardApp', ['ngRoute'])
     }
   };
 })
-.factory('game', function(socket) {
+.factory('game', function(socket) { //Stores all game data.
   var gameData = {
     board: new crossCardModels.Board(),
     player: null,
