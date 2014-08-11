@@ -1,7 +1,7 @@
 <div class="card" ng-class="{blankcard: !card}">
-        <div class="cardcontents">
-          <div ng-show="card.type != '*' && card.type != 'CC'">{{card.value || '&nbsp;'}}</div>
-          <div ng-show="!theme">{{card.type || '&nbsp;'}}</div>
-          <div ng-show="theme" ><img ng-show="card.type" class="cardicon"  src="{{theme[card.type]}}"/></div>
-		</div>
+	<div class="cardcontents">
+	  <div ng-show="card.type != '*' && card.type != 'CC'">{{card.value || '&nbsp;'}}</div>
+	  <div ng-show="!theme">{{card.type || '&nbsp;'}}</div>
+	  <div ng-show="theme" ><img ng-show="card.type" class="cardicon"  src="{{theme[card.type]}}"/></div>
+	</div>
 </div>

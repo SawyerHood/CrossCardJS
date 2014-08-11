@@ -76,7 +76,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('reserve card', function(gameId) { //Someone reserves a card.
-    if(!(data.gameId in games)) //Make sure the game exists.
+    if(!(gameId in games)) //Make sure the game exists.
       return;
     var game = games[gameId];
     game.reserve();

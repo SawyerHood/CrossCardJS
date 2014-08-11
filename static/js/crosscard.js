@@ -250,7 +250,7 @@ angular.module('crossCardApp', ['ngRoute'])
       }
     };
   })
-  .directive('crossCard', function(){
+  .directive('crossCard', function(){ //Used to display cards throughout the app.
     return {
       restrict: 'E',
       scope: {
