@@ -21,7 +21,7 @@
       <div class="card" ng-class="{blankcard: !card}" ng-click="playCard($parent.$index, $index)">
         <div>{{card.value || '&nbsp;'}}</div>
         <div ng-show="!theme">{{card.type || '&nbsp;'}}</div>
-        <div ng-show="theme"><object class="cardicon" type="image/svg+xml" data="{{theme[card.type]}}"></object></div>
+        <div ng-show="theme"><img ng-show="card.type" class="cardicon"  src="{{theme[card.type]}}"/></div>
       </div>
     </td>
     <td class="score">
@@ -36,7 +36,7 @@
       <div class="card" ng-class="{blankcard: !game.getPlayer().currentCard}">
         <div>{{game.getPlayer().currentCard.value || '&nbsp;'}}</div>
         <div ng-show="!theme">{{game.getPlayer().currentCard.type || '&nbsp;'}}</div>
-        <div ng-show="theme"><object class="cardicon" type="image/svg+xml" data="{{theme[game.getPlayer().currentCard.type]}}"></object></div>
+        <div ng-show="theme"><img ng-show="game.getPlayer().currentCard.type" class="cardicon" src="{{theme[game.getPlayer().currentCard.type]}}"/></div>
       </div>
       Current Card
     </td>
@@ -44,7 +44,7 @@
       <div class="card" ng-class="{blankcard: !game.getPlayer().reserveCard}" ng-click="reserve()">
         <div>{{game.getPlayer().reserveCard.value || '&nbsp;'}}</div>
         <div ng-show="!theme">{{game.getPlayer().reserveCard.type || '&nbsp;'}}</div>
-        <div ng-show="theme"><object class="cardicon" type="image/svg+xml" data="{{theme[game.getPlayer().reserveCard.type]}}"></object></div>
+        <div ng-show="theme"><img ng-show="game.getPlayer().reserveCard.type" class="cardicon" src="{{theme[game.getPlayer().reserveCard.type]}}"/></div>
       </div>
       Reserve Card
     </td>
