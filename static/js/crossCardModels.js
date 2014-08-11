@@ -148,7 +148,7 @@
       return newBoard;
     }
 
-    this.size = size || 3;
+    this.size = size || 4;
     this.board = board || this.clearBoard(); //2D array of cards.
 
     /**

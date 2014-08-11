@@ -1,4 +1,4 @@
-
+<div id="header">
 <div ng-show="!game.isMyTurn() && !game.isGameOver()">
   Waiting for other player...
 </div>
@@ -9,7 +9,8 @@
 <div ng-show="!gameOver">
   <h1>It is {{getCurrentPlayer()}} turn.</h1>
 </div>
-
+</div>
+<div id="content">
 <table id="cardcross">
   <tr>
     <td ng-repeat="row in game.getBoard().board" class="score">
@@ -25,6 +26,11 @@
     </td>
   </tr>
 </table>
+</div>
+<div id="footer">
+  <div>
+    Your Hand
+  </div>
 <table id="playercards">
   <tr>
     <td>
@@ -37,3 +43,5 @@
     </td>
   </tr>
 </table>
+</div>
+
