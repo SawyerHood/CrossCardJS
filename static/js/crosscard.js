@@ -249,4 +249,14 @@ angular.module('crossCardApp', ['ngRoute'])
         return inGame;
       }
     };
-  });
+  })
+  .directive('crossCard', function(){
+    return {
+      restrict: 'E',
+      scope: {
+        card: '=card',
+        theme: '=theme'
+      },
+      templateUrl: 'static/partials/card.html'
+      };
+    });
