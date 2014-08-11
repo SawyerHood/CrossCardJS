@@ -9,11 +9,11 @@ angular.module('crossCardApp', ['ngRoute'])
       $scope.game = game;
       baseDeck = baseDeck.data;
       $scope.theme = {};
-      $scope.theme['-'] = '/static/hori.png';
-      $scope.theme['+'] = '/static/cross.png';
-      $scope.theme['|'] = '/static/verticle.png';
-      $scope.theme['*'] = '/static/dot.png';
-      $scope.theme['CC'] = '/static/twirl.png';
+      $scope.theme['-'] = '/static/hori.svg';
+      $scope.theme['+'] = '/static/cross.svg';
+      $scope.theme['|'] = '/static/verti.svg';
+      $scope.theme['*'] = '/static/dot.svg';
+      $scope.theme['CC'] = '/static/swirl.svg';
 
       $scope.getCurrentPlayer = function() { //Returns the name of the current player.
         if (game.isMyTurn()) {
