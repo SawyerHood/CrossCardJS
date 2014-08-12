@@ -18,7 +18,7 @@
     </td>
   </tr>
   <tr ng-repeat="row in game.getBoard().board">
-    <td ng-repeat="card in row track by $index">
+    <td ng-repeat="card in row track by $index" style="text-align:center">
       <cross-card card="card" theme="theme" ng-click="playCard($parent.$index, $index)"></cross-card>
     </td>
     <td class="score">

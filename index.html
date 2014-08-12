@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 
 <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <script src="static/js/angular.min.js"></script>
   <script src="static/js/socket.io-client/socket.io.js"></script>
   <script src="static/js/crosscard.js"></script>
@@ -13,8 +14,9 @@
 </head>
 
 <body ng-app="crossCardApp">
+	<div class="container-fluid">
   <ng-view></ng-view>
-
+</div>
 </body>
 
 </html>
