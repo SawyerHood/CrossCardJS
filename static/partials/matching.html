@@ -1,8 +1,76 @@
-
-<div ng-show="!game.isMatching()">
-  <input ng-model="name" placeholder="Enter your name..."></input>
-  <button ng-click="connect()">Submit</button>
+<div class="landing-page">
+  <div id="header">
+    <img style="width:40vw" src="static/logo.svg"></img>
+  </div>
+ 
+  <div style="position:relative;">
+  <div class="landing-section" style="float: left">
+  	
+  	<h2>Play Now!</h2>
+    <div ng-show="!game.isMatching()">
+      <form ng-submit="connect()" style="width:60%; margin-left: auto; margin-right: auto;">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Name to display." ng-model="name">
+          <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Match!</button>
+      </span>
+        </div>
+      </form>
+    </div>
+    <div ng-show="game.isMatching()">
+      <img src="static/loading.gif" />
+    </div>
+  </div>
+	<div class="landing-section" style="background-color: #35A0CC; height:200px; float: right">
+		<h2>Learn to Play</h2>
+		<img src="static/arrow.svg" style="width: 10vw; top: 40px;"/>
+	</div>
+	<div style="position: absolute; margin-left:auto; margin-right: auto; display: inline-block">
+		<img src="static/or.svg" style="width: 10vw; position: relative; left: -50%; top: 40px"/>
+	</div>
 </div>
-<div ng-show="game.isMatching()">
-  <img src="static/loading.gif" />
+
+
+
+</div>
+  
+
+
+  <div class="row"></div>
+  <div class="col-md-3" style="text-align:center">
+    <div class="row">
+      <h2>Sawyer Hood</h2>
+    </div>
+    <div class="row" style="padding-bottom:30px">
+      <img src="/static/sawyerface.png" />
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <a href="https://twitter.com/sawyerjhood">
+          <img src="/static/twitter.png" style="max-width: 80%; max-height:80%" />
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="https://www.facebook.com/sawyer.hood">
+          <img src="/static/facebook.png" style="max-width: 80%; max-height:80%" />
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="https://www.linkedin.com/pub/sawyer-hood/81/1a/242">
+          <img src="/static/linkedin.png" style="max-width: 80%; max-height:80%" />
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-7" style="border-left: thin solid slategrey; height: 100%; padding-left: 50px">
+    <div class="row">
+      <h2>About the Author</h2>
+    </div>
+    <div class="row">
+      <p>I'm Sawyer a Computer Engineering Student from the University of Central Florida. Born and raised in Orlando and a computer enthusiast since I first hit puberty, It's my life's goal to make an impact on the world of computing. I currently make my living as a full stack developer and tangoing with the web is a part of my everyday life. When I'm not standing at my desk, I'm generally either at a concert or reading a book, or perhaps visiting th elocal Trader Joe's. After College I hope to take a journey out west and see what Silicon Valley has in store for me.</p>
+      <p>My expertise lies in Python and Django, but I also am more than just well versed in Java and Javascript as well. This blog was made as my first miniature nodejs project and is 100% opensource. If you'd like to fork it, take it for a spin, and use it as your own, you can give it a shot <a href="https://github.com/SawyerHood/SawyerBlog">here</a>.</p>
+    </div>
+  </div>
+</div>
+
 </div>

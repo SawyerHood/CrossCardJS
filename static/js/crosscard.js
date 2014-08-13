@@ -70,6 +70,7 @@ angular.module('crossCardApp', ['ngRoute'])
         $location.path('/OnlineMultiplayerGame');
 
       });
+     
 
 
 

@@ -55,9 +55,6 @@
 }
 body {
 	text-align: center;
-    min-height: 800px;
-	
-
 }
 body, html { 
     overflow-x: hidden; 
@@ -102,6 +99,7 @@ body, html {
     overflow:hidden;
     margin-left:auto; 
     margin-right:auto;
+    margin-bottom: 0px;
 }
 #content {
 width:100%;
@@ -110,5 +108,18 @@ margin-right:auto;
 overflow: auto;
 padding-left: 10px;
 padding-right: 10px;
+}
+.landing-section {
+    background-color: #29333a;  
+    width:50%;
+    color: white;
+    padding-top: 0px;
+    margin-top: 0px;
+    text-align: center;
+    min-height: 200px;
+}
+.landing-page {
+    background-color: #29333a;
+
 }
 
