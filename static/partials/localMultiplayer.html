@@ -1,3 +1,4 @@
+<div class="upper">
 <div id="header">
 <div ng-show="!game.isMyTurn() && !game.isGameOver()">
   Waiting for other player...
@@ -19,13 +20,15 @@
   </tr>
   <tr ng-repeat="row in game.getBoard().board">
     <td ng-repeat="card in row track by $index" style="text-align:center">
-      <cross-card card="card" theme="theme" ng-click="playCard($parent.$index, $index)"></cross-card>
+          <cross-card card="card" theme="theme" ng-click="playCard($parent.$index, $index)"></cross-card>
+      </div>
     </td>
     <td class="score">
       {{game.getBoard().getRowValue($index)}}
     </td>
   </tr>
 </table>
+</div>
 </div>
 <div id="footer">
   <div>
@@ -44,4 +47,7 @@
   </tr>
 </table>
 </div>
+<script>
+
+</script>
 

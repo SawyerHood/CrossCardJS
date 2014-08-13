@@ -119,7 +119,8 @@ angular.module('crossCardApp', ['ngRoute'])
           $location.path('/');
         }
       }
-    })
+    });
+
   })
   .factory('socket', function($rootScope) { //Socket io factory.
     var socket = io.connect();
