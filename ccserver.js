@@ -61,7 +61,7 @@ io.on('connection', function(socket) {
 
   socket.on('play card', function(data) { //Someone played a card.
     //TODO server side turn checking.
-    if(!(data.gameId in games)) //Make sure the game exists.
+    if (!(data.gameId in games)) //Make sure the game exists.
       return;
     var game = games[data.gameId];
     game.playCard(data.row, data.col);
@@ -76,7 +76,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('reserve card', function(gameId) { //Someone reserves a card.
-    if(!(gameId in games)) //Make sure the game exists.
+    if (!(gameId in games)) //Make sure the game exists.
       return;
     var game = games[gameId];
     game.reserve();
@@ -91,12 +91,12 @@ io.on('connection', function(socket) {
         break;
       }
     }
-    for (gameId in games) { //If they are in a game remove them.
+    for (var gameId in games) { //If they are in a game remove them.
       for (var j = 0; j < games[gameId].players.length; j++) {
         if (games[gameId].players[j].id == socket.id) {
           var indexToDC = (j + games[gameId].players.length - 1) % games[gameId].players.length;
           var toDC = games[gameId].players[indexToDC].id;
-          for (key in io.sockets.connected) {}
+          for (var key in io.sockets.connected) {}
           if (toDC in io.sockets.connected) {
 
             io.sockets.connected[toDC].emit('booted'); //Boot the other player.
@@ -108,7 +108,6 @@ io.on('connection', function(socket) {
     }
   });
 });
-
 
 
 

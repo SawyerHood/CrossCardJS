@@ -1,51 +1,51 @@
 <div class="upper">
-<div id="header">
-<div ng-show="!game.isMyTurn() && !game.isGameOver()">
-  Waiting for other player...
-</div>
-<div ng-show="game.isGameOver()">
-  <div>The winner is {{game.getWinner()}}.</div>
-  <button ng-click="newGame()">Match again.</button>
-</div>
-<div ng-show="!gameOver">
-  <h1>It is {{getCurrentPlayer()}} turn.</h1>
-</div>
-</div>
-<div id="content">
-<table id="cardcross">
-  <tr>
-    <td ng-repeat="row in game.getBoard().board" class="score">
-      {{game.getBoard().getColValue($index)}}
-    </td>
-  </tr>
-  <tr ng-repeat="row in game.getBoard().board">
-    <td ng-repeat="card in row track by $index" style="text-align:center">
+  <div id="header">
+    <div ng-show="!game.isMyTurn() && !game.isGameOver()">
+      Waiting for other player...
+    </div>
+    <div ng-show="game.isGameOver()">
+      <div>The winner is {{game.getWinner()}}.</div>
+      <button ng-click="newGame()">Match again.</button>
+    </div>
+    <div ng-show="!gameOver">
+      <h1>It is {{getCurrentPlayer()}} turn.</h1>
+    </div>
+  </div>
+  <div id="content">
+    <table id="cardcross">
+      <tr>
+        <td ng-repeat="row in game.getBoard().board" class="score">
+          {{game.getBoard().getColValue($index)}}
+        </td>
+      </tr>
+      <tr ng-repeat="row in game.getBoard().board">
+        <td ng-repeat="card in row track by $index" style="text-align:center">
           <cross-card card="card" theme="theme" ng-click="playCard($parent.$index, $index)"></cross-card>
-      </div>
-    </td>
-    <td class="score">
-      {{game.getBoard().getRowValue($index)}}
-    </td>
-  </tr>
-</table>
+        </div>
+      </td>
+      <td class="score">
+        {{game.getBoard().getRowValue($index)}}
+      </td>
+    </tr>
+  </table>
 </div>
 </div>
 <div id="footer">
   <div>
     Your Hand
   </div>
-<table id="playercards">
-  <tr>
-    <td>
-      <cross-card card="game.getPlayer().currentCard" theme="theme"></cross-card>
-      Current Card
-    </td>
-    <td>
-      <cross-card card="game.getPlayer().reserveCard" theme="theme" ng-click="reserve()"></cross-card>
-      Reserve Card
-    </td>
-  </tr>
-</table>
+  <table id="playercards">
+    <tr>
+      <td>
+        <cross-card card="game.getPlayer().currentCard" theme="theme"></cross-card>
+        Current Card
+      </td>
+      <td>
+        <cross-card card="game.getPlayer().reserveCard" theme="theme" ng-click="reserve()"></cross-card>
+        Reserve Card
+      </td>
+    </tr>
+  </table>
 </div>
 <script>
 

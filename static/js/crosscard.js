@@ -30,14 +30,14 @@ angular.module('crossCardApp', ['ngRoute'])
 
           }
         }
-      }
+      };
 
       $scope.newGame = function() { //Puts the player back into match making.
 
         game.startMatching(game.getPlayer().name);
         $scope.gameOver = false;
         $location.path('/');
-      }
+      };
 
       $scope.reserve = function() { //Reserves a card.
         if ($scope.game.isMyTurn() && !$scope.game.hasMadeMove()) {
@@ -45,11 +45,11 @@ angular.module('crossCardApp', ['ngRoute'])
             alert("Can't reserve");
           }
         }
-      }
+      };
 
       $scope.switchTurnOff = function() {
         $scope.switchTurn = false;
-      }
+      };
 
       $scope.gameOver = false;
       $scope.switchTurn = false;
@@ -63,14 +63,13 @@ angular.module('crossCardApp', ['ngRoute'])
       $scope.game = game;
       $scope.connect = function() {
         game.startMatching($scope.name);
-      }
+      };
 
       socket.on('game updated', function(data) {
         game.stopMatching();
         $location.path('/OnlineMultiplayerGame');
 
       });
-     
 
 
 
@@ -91,7 +90,7 @@ angular.module('crossCardApp', ['ngRoute'])
           }).
           error(function(data, status, headers, config) {
             console.log(status);
-          })
+          });
         }
       }
 
@@ -142,7 +141,7 @@ angular.module('crossCardApp', ['ngRoute'])
               callback.apply(socket, args);
             }
           });
-        })
+        });
       }
     };
   })
@@ -171,7 +170,7 @@ angular.module('crossCardApp', ['ngRoute'])
 
 
     function update(data) {
-      for (prop in data) {
+      for (var prop in data) {
         if (prop != 'board')
           gameData[prop] = data[prop];
       }
@@ -213,7 +212,7 @@ angular.module('crossCardApp', ['ngRoute'])
         socket.emit('reserve card', gameData.gameId);
         return true;
       },
-      isGameOver: null,
+
       initGame: function(data) {
         update(data);
       },
@@ -252,7 +251,7 @@ angular.module('crossCardApp', ['ngRoute'])
       }
     };
   })
-  .directive('crossCard', function(){ //Used to display cards throughout the app.
+  .directive('crossCard', function() { //Used to display cards throughout the app.
     return {
       restrict: 'E',
       scope: {
@@ -260,5 +259,5 @@ angular.module('crossCardApp', ['ngRoute'])
         theme: '=theme'
       },
       templateUrl: 'static/partials/card.html'
-      };
-    });
+    };
+  });

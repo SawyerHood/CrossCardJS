@@ -62,10 +62,10 @@ body, html {
 }
 .nextturn {
 	position: absolute;
-  	top: 50%;
-  	left: 50%;
-  	margin-left:auto; 
-    margin-right:auto;
+ top: 50%;
+ left: 50%;
+ margin-left:auto; 
+ margin-right:auto;
 }
 
 .cardicon {
@@ -78,8 +78,8 @@ body, html {
 
 .cardcontents {
   position: relative;
-    top: 50%;
-    transform: translateY(-50%);
+  top: 50%;
+  transform: translateY(-50%);
 }
 #footer {   
     width:100%;    
@@ -102,12 +102,12 @@ body, html {
     margin-bottom: 0px;
 }
 #content {
-width:100%;
-margin-left:auto; 
-margin-right:auto;
-overflow: scroll;
-padding-left: 10px;
-padding-right: 10px;
+    width:100%;
+    margin-left:auto; 
+    margin-right:auto;
+    overflow: scroll;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .landing-wrapper {
@@ -166,7 +166,7 @@ padding-right: 10px;
     .right {
         float: right;
         border-left: 6px solid white;
-     
+        
     }
     .landing-section {
         width:50%;
