@@ -1,3 +1,4 @@
+
 .upper {
     position: absolute;
     top: 0;
@@ -57,8 +58,7 @@ body {
 	text-align: center;
 }
 body, html { 
-    overflow-x: hidden; 
-    overflow-y: hidden;
+
 }
 .nextturn {
 	position: absolute;
@@ -105,21 +105,83 @@ body, html {
 width:100%;
 margin-left:auto; 
 margin-right:auto;
-overflow: auto;
+overflow: scroll;
 padding-left: 10px;
 padding-right: 10px;
 }
+
+.landing-wrapper {
+    position:relative;
+}
+.landing-page {
+    background-color: #29333a;
+}
+.mid-icon-wrapper {
+    position: absolute; 
+    margin-left:auto; 
+    margin-right: auto; 
+    display: inline-block;
+}
+.mid-icon {
+    width: 10vw; 
+    position: relative; 
+    left: -50%; 
+    top: 40px
+}
+.landing-footer {
+    color: black !important;
+    background-color: white !important;
+    padding: 20px;
+}
+
+.footer-img {
+    padding: 10px;
+}
+
 .landing-section {
-    background-color: #29333a;  
-    width:50%;
+    background-color: #CC3550;  
     color: white;
     padding-top: 0px;
     margin-top: 0px;
     text-align: center;
-    min-height: 200px;
-}
-.landing-page {
-    background-color: #29333a;
 
 }
+
+.left {
+}
+.right {
+    background-color: #35ccb1;
+}
+.header {
+    background-color: #29333a;
+    color: white;
+    width: 100%;
+}
+
+@media (min-width: 1200px) {
+    .left {
+        float: left;
+        border-right: 6px solid white;
+    }
+    .right {
+        float: right;
+        border-left: 6px solid white;
+     
+    }
+    .landing-section {
+        width:50%;
+        min-height: 400px;
+    }
+
+}
+
+@media (max-width: 1199px) {
+    
+    .landing-section {
+        width:100%;
+    }
+
+}
+
+
 
