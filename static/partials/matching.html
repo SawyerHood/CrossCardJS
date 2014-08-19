@@ -3,6 +3,7 @@
     <img style="width:30vw" src="static/logo.svg"></img>
 </div>
 
+
 <div class="landing-wrapper">
   <div class="landing-section left">
   	
@@ -18,7 +19,9 @@
 </form>
 </div>
 <div ng-show="game.isMatching()">
-  <img src="static/loading.gif" />
+  
+  <object type="image/svg+xml" data="static/spinner.svg">
+  </object>
 </div>
 </div>
 <div class="landing-section right">
@@ -30,7 +33,7 @@
 </div>
 </div>
 
-</div>
+
 
 <div class="landing-wrapper">
   <div class="landing-section left landing-footer">
@@ -49,6 +52,7 @@
           <img src="/static/linkedin.png"  class="footer-img" />
       </a>
   </div>
+</div>
 </div>
 
 <div class="landing-section right landing-footer">
