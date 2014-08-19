@@ -8,6 +8,7 @@
 		<path id="arc4" fill="none" stroke="#ac9d93" stroke-width="20"/>
 
 	<script type="text/javascript"><![CDATA[
+  //Taken from this thread http://stackoverflow.com/questions/5736398/how-to-calculate-the-svg-path-for-an-arc-of-a-circle
 	function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
   var angleInRadians = (angleInDegrees-90) * Math.PI / 180.0;
 
