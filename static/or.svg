@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="200"
+   height="200"
+   id="svg4038"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="or.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1387"
+     inkscape:window-height="855"
+     id="namedview3238"
+     showgrid="false"
+     inkscape:zoom="1.18"
+     inkscape:cx="-9.7457627"
+     inkscape:cy="100"
+     inkscape:window-x="53"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4038" />
+  <defs
+     id="defs4040" />
+  <metadata
+     id="metadata4043">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(0,-852.36218)"
+     id="layer1">
+    <path
+       d="m 173.74624,109.33881 a 58.336311,58.336311 0 1 1 -116.672624,0 58.336311,58.336311 0 1 1 116.672624,0 z"
+       transform="matrix(1.5757576,0,0,1.5757576,-81.85807,780.07071)"
+       id="path4046"
+       style="fill:#969899;fill-opacity:1;stroke-width:1.20500004;stroke-miterlimit:4;stroke-dasharray:none" />
+    <text
+       x="43.808594"
+       y="983.47546"
+       id="text4048"
+       xml:space="preserve"
+       style="font-size:144px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+       sodipodi:linespacing="125%"><tspan
+         x="43.808594"
+         y="983.47546"
+         id="tspan4050"
+         style="font-size:120px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#e3dbdb;font-family:Arial;-inkscape-font-specification:Arial">or</tspan></text>
+  </g>
+  <text
+     xml:space="preserve"
+     style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+     x="148.30508"
+     y="-42.372883"
+     id="text3240"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       id="tspan3242"
+       x="148.30508"
+       y="-42.372883" /></text>
+</svg>

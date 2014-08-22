@@ -2,10 +2,10 @@
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="400" height="400">
 		<circle cx="200" cy="200" r="30"  fill="red" />
-		<path id="arc1" fill="none" stroke="#35ccb1" stroke-width="20"/>
-		<path id="arc2" fill="none" stroke="#29333a" stroke-width="20"/>
-		<path id="arc3" fill="none" stroke="#ffffff" stroke-width="20"/>
-		<path id="arc4" fill="none" stroke="#ac9d93" stroke-width="20"/>
+		<path id="arc1" class="arc" fill="none" stroke="#35ccb1" stroke-width="20"/>
+		<path id="arc2" class="arc" fill="none" stroke="#29333a" stroke-width="20"/>
+		<path id="arc3" class="arc" fill="none" stroke="#ffffff" stroke-width="20"/>
+		<path id="arc4" class="arc" fill="none" stroke="#ac9d93" stroke-width="20"/>
 
 	<script type="text/javascript"><![CDATA[
   //Taken from this thread http://stackoverflow.com/questions/5736398/how-to-calculate-the-svg-path-for-an-arc-of-a-circle
@@ -42,6 +42,12 @@ function describeArc(x, y, radius, startAngle, endAngle){
   @-moz-keyframes twirl { 100% { -moz-transform: rotate(360deg); } }
 @-webkit-keyframes twirl { 100% { -webkit-transform: rotate(360deg); } }
 @keyframes twirl { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+.arc {
+-webkit-transform-origin: 200px 200px;
+-moz-transform-origin: 200px 200px;
+transform-origin: 200px 200px;
+}
 
 #arc1 {
    -webkit-transform-origin: 200px 200px;
