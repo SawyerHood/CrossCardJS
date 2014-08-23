@@ -285,6 +285,15 @@
       }
     };
 
+    //Returns a copy of the board, awesome for the AI.
+    this.clone = function() {
+      var boardCopy = [];
+      for(var i = 0; i < this.board.length; i++) {
+        boardCopy = this.board[i].slice(0);
+      }
+      return this(boardCopy, this.size);
+    }
+
 
   };
 
