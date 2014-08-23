@@ -155,7 +155,8 @@
      * Checks if there is a card at this location.
      */
     this.isOccupied = function(row, col) {
-      if (this.board.length <= row || this.board[row].length <= col)
+
+      if (row < 0 || this.board.length <= row || this.board[row].length <= col || col < 0)
         return true;
       return this.board[row][col] !== null;
     };
@@ -258,7 +259,6 @@
     this.getWinner = function() {
       if (this.isBoardFull()) {
         var colVals = this.getSortedColVaules();
-        console.log(colVals);
         var rowVals = this.getSortedRowVaules();
         for (var i = 0; i < this.size; i++) {
           if (colVals[i] > rowVals[i])
@@ -288,10 +288,10 @@
     //Returns a copy of the board, awesome for the AI.
     this.clone = function() {
       var boardCopy = [];
-      for(var i = 0; i < this.board.length; i++) {
-        boardCopy = this.board[i].slice(0);
+      for(var i = 0; i < this.size; i++) {
+        boardCopy[i] = this.board[i].slice(0);
       }
-      return this(boardCopy, this.size);
+      return new Board(boardCopy, this.size);
     };
 
 

@@ -2,7 +2,7 @@
 (function(exports) {
 
 
-    var NUM_TO_SIM = 10000;
+    var NUM_TO_SIM = 1000000;
 
 
     function initWinArray(size) {
@@ -21,7 +21,7 @@
 
         for (var i = 0; i < NUM_TO_SIM; i++) {
             var tempBoard = board.clone();
-            var tempDeck = deck.slice(0);
+            var tempDeck = exports.shuffle(deck.slice(0));
             var result = exports.playRandomGame(tempDeck, tempBoard, currentCard, canReserve, playerVal);
             if (result !== false) {
                 winArray[result] += 1;
@@ -36,7 +36,7 @@
                 maxIndex = i;
             }
         }
-
+        console.log('winArray : ' + winArray);
         return exports.toRowAndCol(maxIndex, board.size);
     };
 
@@ -45,12 +45,17 @@
         var randomIndex;
         var isReserve;
         var rowAndCol;
+        
+       
         do {
-            randomIndex = Math.random() * (board.size * board.size + 1);
+            randomIndex = Math.floor(Math.random() * (board.size * board.size + 1));
             isReserve = board.size * board.size == randomIndex;
+            if(isReserve && canReserve) {
+                break;
+            }
             rowAndCol = exports.toRowAndCol(randomIndex, board.size);
-        } while (!(isReserve && canReserve) || board.isOccupied(rowAndCol[0], rowAndCol[1]));
-
+        } while (board.isOccupied(rowAndCol[0], rowAndCol[1]));
+        
         if (!isReserve) {
             board.placeCard(currentCard, rowAndCol[0], rowAndCol[1]);
         }
@@ -89,5 +94,39 @@
         toReturn.push(Math.floor(index % size));
         return toReturn;
     };
+
+    exports.shuffle = function shuffle(o) {
+        for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+        return o;
+  };
+
+  exports.AIGame = function(board, humanPlayerName, deck) {
+    var players = [];
+    players.push(humanPlayer);
+    players.push(new crossCardModels.Player('|', humanPlayerName, '0000'));
+    players.push(new crossCardModels.Player('-', 'Computer Player', '1111'));
+    this.game = new crossCardModels.Game(board, players, deck, 11);
+
+    this.playCard = function(row, col) {
+        this.game.playCard(row, col);
+        this.game.nextTurn();
+        return new Promise(function(resolve){
+            if(!this.game.board.isBoardFull())
+            {
+                var whereToPlay = exports.calculateNextMove(game.deck, game.board, game.getCurrentPlayer().currentCard, 
+                    this.game.getCurrentPlayer().reserveCard == null, this.getCurrentPlayer().type);
+                if(whereToPlay[0] == -1 && whereToPlay[1] == -1){
+                    game.reserve();
+                    whereToPlay = exports.calculateNextMove(this.game.deck, this.game.board, this.game.getCurrentPlayer().currentCard, 
+                    this.game.getCurrentPlayer().reserveCard == null, this.game.getCurrentPlayer().type);
+                }
+                this.game.playCard(whereToPlay[0], whereToPlay[1]);
+                this.game.nextTurn(); 
+            }
+            resolve(this.game.makeClientSlice('0000'));
+
+        });
+    }
+  };
 
 })(typeof exports === 'undefined' ? this['crossCardAI'] = {} : exports);

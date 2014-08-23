@@ -111,16 +111,20 @@
         this.game.playCard(row, col);
         this.game.nextTurn();
         return new Promise(function(resolve){
-            var whereToPlay = exports.calculateNextMove(game.deck, game.board, game.getCurrentPlayer().currentCard, 
-                this.game.getCurrentPlayer().reserveCard == null, this.getCurrentPlayer().type);
-            if(whereToPlay[0] == -1 && whereToPlay[1] == -1){
-                game.reserve();
-                whereToPlay = exports.calculateNextMove(this.game.deck, this.game.board, this.game.getCurrentPlayer().currentCard, 
-                this.game.getCurrentPlayer().reserveCard == null, this.game.getCurrentPlayer().type);
+            if(!this.game.board.isBoardFull())
+            {
+                var whereToPlay = exports.calculateNextMove(game.deck, game.board, game.getCurrentPlayer().currentCard, 
+                    this.game.getCurrentPlayer().reserveCard == null, this.getCurrentPlayer().type);
+                if(whereToPlay[0] == -1 && whereToPlay[1] == -1){
+                    game.reserve();
+                    whereToPlay = exports.calculateNextMove(this.game.deck, this.game.board, this.game.getCurrentPlayer().currentCard, 
+                    this.game.getCurrentPlayer().reserveCard == null, this.game.getCurrentPlayer().type);
+                }
+                this.game.playCard(whereToPlay[0], whereToPlay[1]);
+                this.game.nextTurn(); 
             }
-            this.game.playCard(whereToPlay[0], whereToPlay[1]);
-            this.game.nextTurn();
             resolve(this.game.makeClientSlice('0000'));
+
         });
     }
   };

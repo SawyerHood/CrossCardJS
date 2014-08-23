@@ -60,11 +60,13 @@ angular.module('crossCardApp', ['ngRoute'])
     }
   ])
   .controller('MatchingController', ['$scope', '$location', 'socket', 'game', //Controller for the match making process.
-    function($scope, $location, socket, game) {
+    function($scope, $location, socket, game, singlePlayer) { //TODO add a single player flag.
 
       $scope.game = game;
       $scope.connect = function() {
         game.startMatching($scope.name);
+        if(singlePlayer)
+          $location.path('/SinglePlayerGame');
       };
 
       socket.on('game updated', function(data) {
@@ -97,9 +99,35 @@ angular.module('crossCardApp', ['ngRoute'])
       }
 
     })
+    .when('/SinglePlayerGame', {
+      templateUrl: 'static/partials/localMultiplayer.html',
+      controller: 'BoardController',
+      resolve: {
+        baseDeck: function($http) {
+          return $http({
+            method: 'GET',
+            url: 'static/deck.json'
+          }).
+          success(function(data, status, headers, config) {
+            return data;
+          }).
+          error(function(data, status, headers, config) {
+            console.log(status);
+          });
+        },
+        singlePlayer: function(){
+          return true;
+        }
+        //TODO Add game injection here.
+      }
+
+    })
       .when('/', {
         templateUrl: "static/partials/matching.html",
-        controller: "MatchingController"
+        controller: "MatchingController",
+        resolve: {singlePlayer: function(){
+          return true;
+        }}
       });
 
 
@@ -244,7 +272,6 @@ angular.module('crossCardApp', ['ngRoute'])
         return inGame;
       }
     };
-  })
   })
   .factory('game', function(socket) { //Stores all game data.
 

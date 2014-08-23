@@ -2,6 +2,8 @@
  * The client javascript file.
  * @author Sawyer Hood
  */
+
+
 angular.module('crossCardApp', ['ngRoute'])
   .controller('BoardController', ['$scope', '$http', 'baseDeck', 'game', '$location', //Controls the board.
     function($scope, $http, baseDeck, game, $location) {
@@ -58,11 +60,13 @@ angular.module('crossCardApp', ['ngRoute'])
     }
   ])
   .controller('MatchingController', ['$scope', '$location', 'socket', 'game', //Controller for the match making process.
-    function($scope, $location, socket, game) {
+    function($scope, $location, socket, game, singlePlayer) { //TODO add a single player flag.
 
       $scope.game = game;
       $scope.connect = function() {
         game.startMatching($scope.name);
+        if(singlePlayer)
+          $location.path('/SinglePlayerGame');
       };
 
       socket.on('game updated', function(data) {
@@ -95,9 +99,35 @@ angular.module('crossCardApp', ['ngRoute'])
       }
 
     })
+    .when('/SinglePlayerGame', {
+      templateUrl: 'static/partials/localMultiplayer.html',
+      controller: 'BoardController',
+      resolve: {
+        baseDeck: function($http) {
+          return $http({
+            method: 'GET',
+            url: 'static/deck.json'
+          }).
+          success(function(data, status, headers, config) {
+            return data;
+          }).
+          error(function(data, status, headers, config) {
+            console.log(status);
+          });
+        },
+        singlePlayer: function(){
+          return true;
+        }
+
+      }
+
+    })
       .when('/', {
         templateUrl: "static/partials/matching.html",
-        controller: "MatchingController"
+        controller: "MatchingController",
+        resolve: {singlePlayer: function(){
+          return true;
+        }}
       });
 
 
@@ -142,6 +172,104 @@ angular.module('crossCardApp', ['ngRoute'])
             }
           });
         });
+      }
+    };
+  })
+  .factory('singlePlayerGame', function(baseDeck) {
+    var gameData;
+    var madeMove;
+    var matching;
+    var gameOver;
+    var inGame;
+    var aiGame;
+
+    function resetGame() {
+      gameData = {
+        board: new crossCardModels.Board(undefined, 4),
+        player: null,
+        otherPlayer: null,
+        currentTurnId: 0,
+        gameId: 0
+      };
+
+      madeMove = false;
+      matching = false;
+      gameOver = false;
+      inGame = false;
+      var aiGame = null;
+    }
+
+    function update(data) {
+      for (var prop in data) {
+        if (prop != 'board')
+          gameData[prop] = data[prop];
+      }
+      madeMove = false;
+      gameData.board.board = data.board;
+      if (gameData.board.isBoardFull()) {
+        gameOver = true;
+      } else {
+        gameOver = false;
+      }
+    }
+
+    return {
+      getBoard: function() {
+        return gameData.board;
+      },
+      playCard: function(row, col) {
+        var cardPlaced = gameData.board.placeCard(gameData['player'].currentCard, row, col);
+        if (!cardPlaced)
+          return false;
+        madeMove = true;
+        aiGame.playCard(row, col).then(function(data){
+          update(data);
+        });
+        return true;
+      },
+      reserve: function() {
+        if (gameData['player'].reserveCard)
+          return false;
+        madeMove = true;
+        aiGame.reserve();
+        return true;
+      },
+
+      initGame: function(data) {
+        update(data);
+      },
+      getPlayer: function() {
+        return gameData.player;
+      },
+      getOtherPlayer: function() {
+        return gameData.otherPlayer;
+      },
+      isMyTurn: function() {
+        return gameData.player.id == gameData.currentTurnId;
+      },
+      hasMadeMove: function() {
+        return madeMove;
+      },
+      isMatching: function() {
+        return matching;
+      },
+      startMatching: function(name) {
+        resetGame();
+        aiGame = new crossCardAI.AIGame(gameData.board, name, baseDeck)//TODO Check to make sure that base deck works here
+        matching = false;
+        inGame = true;
+      },
+      stopMatching: function() {
+        matching = false;
+      },
+      isGameOver: function() {
+        return gameOver;
+      },
+      getWinner: function() {
+        return gameData.player.type == gameData.board.getWinner() ? gameData.player.name : gameData.otherPlayer.name;
+      },
+      isInGame: function() {
+        return inGame;
       }
     };
   })
