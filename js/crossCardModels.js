@@ -2,7 +2,7 @@
  * Models used for the CrossCard game. Used in both the client and the server code.
  * @author Sawyer Hood
  */
-
+'use strict';
 (function(exports) {
 
   /**
@@ -19,7 +19,7 @@
    */
   exports.Player = function Player(type, name, id) {
     this.type = type; // - or | for what player they are.
-    this.name = name || "Sawyer"; //Name of the player.
+    this.name = name || 'Sawyer'; //Name of the player.
     this.id = id || 1; // A unique identifier, the server uses thier socket.io client id.
     this.currentCard = null; // Card to play
     this.reserveCard = null; //Card in reserve
@@ -129,7 +129,7 @@
      * Initializes the board.
      */
     this.clearBoard = function() {
-      newBoard = [];
+      var newBoard = [];
       for (var i = 0; i < this.size; i++) {
         newBoard.push([]);
         for (var j = 0; j < this.size; j++) {
@@ -155,7 +155,8 @@
      * Checks if there is a card at this location.
      */
     this.isOccupied = function(row, col) {
-      if (this.board.length <= row || this.board[row].length <= col)
+
+      if (row < 0 || this.board.length <= row || this.board[row].length <= col || col < 0)
         return true;
       return this.board[row][col] !== null;
     };
@@ -181,9 +182,9 @@
       for (var i = 0; i < this.board[row].length; i++) {
         if (!this.isOccupied(row, i)) {
           continue;
-        } else if (this.board[row][i].type == "+" || this.board[row][i].type == "-") {
+        } else if (this.board[row][i].type == '+' || this.board[row][i].type == '-') {
           total += this.board[row][i].value; //Add to the total
-        } else if (this.board[row][i].type == "*") { //Zero the row.
+        } else if (this.board[row][i].type == '*') { //Zero the row.
           return 0;
         }
       }
@@ -198,9 +199,9 @@
       for (var i = 0; i < this.board.length; i++) {
         if (!this.isOccupied(i, col)) {
           continue;
-        } else if (this.board[i][col].type == "+" || this.board[i][col].type == "|") {
+        } else if (this.board[i][col].type == '+' || this.board[i][col].type == '|') {
           total += this.board[i][col].value; //Add to the total
-        } else if (this.board[i][col].type == "*") { //Zero the row.
+        } else if (this.board[i][col].type == '*') { //Zero the row.
           return 0;
         }
       }
@@ -258,13 +259,12 @@
     this.getWinner = function() {
       if (this.isBoardFull()) {
         var colVals = this.getSortedColVaules();
-        console.log(colVals);
         var rowVals = this.getSortedRowVaules();
         for (var i = 0; i < this.size; i++) {
           if (colVals[i] > rowVals[i])
-            return "|";
+            return '|';
           if (rowVals[i] > colVals[i])
-            return "-";
+            return '-';
         }
       }
       return null;
@@ -288,11 +288,11 @@
     //Returns a copy of the board, awesome for the AI.
     this.clone = function() {
       var boardCopy = [];
-      for(var i = 0; i < this.board.length; i++) {
-        boardCopy = this.board[i].slice(0);
+      for(var i = 0; i < this.size; i++) {
+        boardCopy[i] = this.board[i].slice(0);
       }
-      return this(boardCopy, this.size);
-    }
+      return new Board(boardCopy, this.size);
+    };
 
 
   };

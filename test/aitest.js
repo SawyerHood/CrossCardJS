@@ -1,7 +1,11 @@
 var assert = require('assert');
-var gameModels = require('../static/js/crossCardModels.js');
-var ai = require('../static/js/ai.js');
+var gameModels = require('../js/crossCardModels.js');
+var ai = require('../js/ai.js');
+var fs = require('fs');
 
+var deck = JSON.parse(fs.readFileSync(__dirname + '/deck.json', 'utf8'));
+
+console.log('The index is ' + ai.calculateNextMove(deck, new gameModels.Board(undefined, 4), {type:'|', value:5}, true, '-'));
 describe('AI', function(){
     describe('#toOneDimIndex()', function(){
         it('Should return the correct 1-d representation if the row and col are on the board.', function() {
@@ -33,4 +37,17 @@ describe('AI', function(){
             assert.deepEqual([-1, -1], ai.toRowAndCol(16, 4));
         });
     });
+
+    /*describe('#calculateNextMove()', function(){
+        it('Should return the 2-D representation of a 1-D index.', function() {
+            assert.deepEqual([2,2], ai.toRowAndCol(10, 4));
+            assert.deepEqual([0,0], ai.toRowAndCol(0, 4));
+            assert.deepEqual([1,0], ai.toRowAndCol(4, 4));
+
+        });
+         it('Should return the -1 if the index is invalid.', function() {
+            assert.deepEqual(-1, ai.toRowAndCol(-1, 4));
+            assert.deepEqual([-1, -1], ai.toRowAndCol(16, 4));
+        });
+    });*/
 });
