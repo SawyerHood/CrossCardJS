@@ -118,7 +118,7 @@ angular.module('crossCardApp', ['ngRoute'])
         singlePlayer: function(){
           return true;
         }
-
+        //TODO Add game injection here.
       }
 
     })

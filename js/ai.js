@@ -102,7 +102,6 @@
 
   exports.AIGame = function(board, humanPlayerName, deck) {
     var players = [];
-    players.push(humanPlayer);
     players.push(new crossCardModels.Player('|', humanPlayerName, '0000'));
     players.push(new crossCardModels.Player('-', 'Computer Player', '1111'));
     this.game = new crossCardModels.Game(board, players, deck, 11);
