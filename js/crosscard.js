@@ -175,7 +175,7 @@ angular.module('crossCardApp', ['ngRoute'])
       }
     };
   })
-  .factory('singlePlayerGame', function(baseDeck) {
+  .factory('singlePlayerGame', function(baseDeck) { //Duplicate, this should be replaced.
     var gameData;
     var madeMove;
     var matching;
